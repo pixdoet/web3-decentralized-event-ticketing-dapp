@@ -1,97 +1,35 @@
-import React from 'react';
-import { Wallet, Ticket, Sparkles } from 'lucide-react';
-import { useWallet } from '../hooks/useWallet';
+import React from 'react'
 
-interface HeaderProps {
-  currentView: string;
-  setCurrentView: (view: string) => void;
-}
-
-const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
-  const { wallet, connectWallet, disconnectWallet } = useWallet();
-
+const Header: React.FC = () => {
   return (
-    <header className="glass-card rounded-2xl p-6 mb-8">
+    <header className="glass animate-fade-in-up p-6">
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <div className="p-2 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl">
-            <Ticket className="w-8 h-8 text-white" />
+        <div className="flex items-center space-x-4">
+          <div className="w-10 h-10 glass-light rounded-full flex items-center justify-center">
+            <svg className="w-6 h-6 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+            </svg>
           </div>
           <div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-              TicketChain
-            </h1>
-            <p className="text-sm text-gray-600">Decentralized Event Ticketing</p>
+            <h1 className="text-2xl font-bold text-gray-800">Glassmorphism Repository</h1>
+            <p className="text-gray-600 text-sm">Modern Git Interface with Beautiful Design</p>
           </div>
         </div>
-
-        <nav className="hidden md:flex items-center space-x-6">
-          <button
-            onClick={() => setCurrentView('events')}
-            className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-              currentView === 'events'
-                ? 'glass-button text-blue-600 font-medium'
-                : 'text-gray-600 hover:text-blue-600'
-            }`}
-          >
-            Events
+        
+        <div className="flex items-center space-x-3">
+          <button className="glass-light px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-white/30 transition-all duration-200">
+            Clone
           </button>
-          <button
-            onClick={() => setCurrentView('tickets')}
-            className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-              currentView === 'tickets'
-                ? 'glass-button text-blue-600 font-medium'
-                : 'text-gray-600 hover:text-blue-600'
-            }`}
-          >
-            My Tickets
+          <button className="glass-light px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-white/30 transition-all duration-200">
+            Pull
           </button>
-          <button
-            onClick={() => setCurrentView('ai-assistant')}
-            className={`px-4 py-2 rounded-lg transition-all duration-300 flex items-center space-x-2 ${
-              currentView === 'ai-assistant'
-                ? 'glass-button text-blue-600 font-medium'
-                : 'text-gray-600 hover:text-blue-600'
-            }`}
-          >
-            <Sparkles className="w-4 h-4" />
-            <span>AI Assistant</span>
+          <button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-lg text-sm font-medium hover:from-blue-600 hover:to-purple-700 transition-all duration-200 shadow-lg">
+            Push
           </button>
-        </nav>
-
-        <div className="flex items-center space-x-4">
-          {wallet.isConnected ? (
-            <div className="flex items-center space-x-3">
-              <div className="glass-card px-4 py-2 rounded-lg">
-                <p className="text-sm text-gray-600">Balance</p>
-                <p className="font-semibold">{wallet.balance} ETH</p>
-              </div>
-              <div className="glass-card px-4 py-2 rounded-lg">
-                <p className="text-sm text-gray-600">Address</p>
-                <p className="font-mono text-sm">
-                  {wallet.address?.slice(0, 6)}...{wallet.address?.slice(-4)}
-                </p>
-              </div>
-              <button
-                onClick={disconnectWallet}
-                className="glass-button px-4 py-2 rounded-lg text-red-600 hover:text-red-700"
-              >
-                Disconnect
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={connectWallet}
-              className="glass-button px-6 py-3 rounded-lg flex items-center space-x-2 text-blue-600 hover:text-blue-700 font-medium"
-            >
-              <Wallet className="w-5 h-5" />
-              <span>Connect Wallet</span>
-            </button>
-          )}
         </div>
       </div>
     </header>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header
