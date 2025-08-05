@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
-import { Search, Filter, Grid, List } from 'lucide-react';
+import { Search, Filter, Grid, List, Plus } from 'lucide-react';
 import EventCard from './EventCard';
+import CreateEventModal from './CreateEventModal';
 import { mockEvents } from '../data/mockData';
 import { Event } from '../types';
+import { RECEIVER_WALLET_ADDRESS } from '../config/constants';
 
 const EventsView: React.FC = () => {
-  const [events] = useState<Event[]>(mockEvents);
+  const [events, setEvents] = useState<Event[]>(mockEvents);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-  const categories = ['All', 'Technology', 'Music', 'Art', 'Gaming'];
+  const categories = ['All', 'Technology', 'Music', 'Art', 'Gaming', 'Sports', 'Business', 'Education'];
 
   const filteredEvents = events.filter(event => {
     const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -22,8 +25,22 @@ const EventsView: React.FC = () => {
   const handleMintTicket = (eventId: string) => {
     const event = events.find(e => e.id === eventId);
     if (event) {
-      alert(`Minting NFT ticket for ${event.title}!\n\nThis would normally:\n1. Call smart contract mint function\n2. Transfer ${event.price} ETH\n3. Generate unique NFT with event metadata\n4. Add ticket to your wallet`);
+      alert(`Minting NFT ticket for ${event.title}!\n\nTransaction Details:\n• Price: ${event.price} ETH\n• Receiver: ${RECEIVER_WALLET_ADDRESS}\n\nThis would normally:\n1. Call smart contract mint function\n2. Transfer ${event.price} ETH to receiver wallet\n3. Generate unique NFT with event metadata\n4. Add ticket to your wallet`);
     }
+  };
+
+  const handleCreateEvent = (newEventData: Omit<Event, 'id' | 'soldTickets'>) => {
+    const newEvent: Event = {
+      ...newEventData,
+      id: Date.now().toString(),
+      soldTickets: 0,
+      receiverWallet: RECEIVER_WALLET_ADDRESS
+    };
+    
+    setEvents(prev => [newEvent, ...prev]);
+    
+    // Show success message
+    alert(`Event "${newEvent.title}" created successfully!\n\nPayment Configuration:\n• Receiver Wallet: ${RECEIVER_WALLET_ADDRESS}\n• Ticket Price: ${newEvent.price} ETH\n\nThis would normally:\n1. Deploy event smart contract\n2. Set up NFT ticket minting\n3. Configure payment routing to receiver wallet\n4. Register event on blockchain\n5. Make event available for ticket sales`);
   };
 
   return (
@@ -37,17 +54,27 @@ const EventsView: React.FC = () => {
           
           <div className="flex items-center space-x-3">
             <button
-              onClick={() => setViewMode('grid')}
-              className={`glass-button p-2 rounded-lg ${viewMode === 'grid' ? 'text-blue-600' : 'text-gray-600'}`}
+              onClick={() => setIsCreateModalOpen(true)}
+              className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 flex items-center space-x-2 font-medium"
             >
-              <Grid className="w-5 h-5" />
+              <Plus className="w-5 h-5" />
+              <span>Create Event</span>
             </button>
-            <button
-              onClick={() => setViewMode('list')}
-              className={`glass-button p-2 rounded-lg ${viewMode === 'list' ? 'text-blue-600' : 'text-gray-600'}`}
-            >
-              <List className="w-5 h-5" />
-            </button>
+            
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`glass-button p-2 rounded-lg ${viewMode === 'grid' ? 'text-blue-600' : 'text-gray-600'}`}
+              >
+                <Grid className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={`glass-button p-2 rounded-lg ${viewMode === 'list' ? 'text-blue-600' : 'text-gray-600'}`}
+              >
+                <List className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -103,6 +130,12 @@ const EventsView: React.FC = () => {
           <p className="text-gray-500">Try adjusting your search terms or filters</p>
         </div>
       )}
+
+      <CreateEventModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onCreateEvent={handleCreateEvent}
+      />
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import { Event, Ticket } from '../types';
+import { RECEIVER_WALLET_ADDRESS } from '../config/constants';
 
 export const mockEvents: Event[] = [
   {
@@ -13,7 +14,8 @@ export const mockEvents: Event[] = [
     soldTickets: 342,
     image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop',
     organizer: '0x1234...5678',
-    category: 'Technology'
+    category: 'Technology',
+    receiverWallet: RECEIVER_WALLET_ADDRESS
   },
   {
     id: '2',
@@ -27,7 +29,8 @@ export const mockEvents: Event[] = [
     soldTickets: 756,
     image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop',
     organizer: '0x9876...4321',
-    category: 'Music'
+    category: 'Music',
+    receiverWallet: RECEIVER_WALLET_ADDRESS
   },
   {
     id: '3',
@@ -41,7 +44,8 @@ export const mockEvents: Event[] = [
     soldTickets: 89,
     image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop',
     organizer: '0x5555...7777',
-    category: 'Art'
+    category: 'Art',
+    receiverWallet: RECEIVER_WALLET_ADDRESS
   },
   {
     id: '4',
@@ -55,7 +59,23 @@ export const mockEvents: Event[] = [
     soldTickets: 234,
     image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&h=600&fit=crop',
     organizer: '0x3333...9999',
-    category: 'Gaming'
+    category: 'Gaming',
+    receiverWallet: RECEIVER_WALLET_ADDRESS
+  },
+  {
+    id: '5',
+    title: 'Crypto Startup Pitch Night',
+    description: 'Join emerging crypto startups as they pitch their innovative solutions to investors and the community. Network with founders, developers, and crypto enthusiasts.',
+    date: '2024-04-05',
+    location: 'Austin, TX',
+    price: 0.03,
+    maxPrice: 0.05,
+    totalTickets: 150,
+    soldTickets: 23,
+    image: 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&h=600&fit=crop',
+    organizer: '0x7777...1111',
+    category: 'Technology',
+    receiverWallet: RECEIVER_WALLET_ADDRESS
   }
 ];
 

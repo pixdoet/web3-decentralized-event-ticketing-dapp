@@ -11,6 +11,7 @@ export interface Event {
   image: string;
   organizer: string;
   category: string;
+  receiverWallet: string;
 }
 
 export interface Ticket {
