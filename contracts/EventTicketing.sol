@@ -1,21 +1,19 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/Pausable.sol";
 
 /**
  * @title EventTicketing
  * @dev NFT-based event ticketing system with dynamic pricing and resale functionality
  */
 contract EventTicketing is ERC721, ERC721URIStorage, Ownable, ReentrancyGuard, Pausable {
-    using Counters for Counters.Counter;
     
-    Counters.Counter private _tokenIdCounter;
+    uint256 private _nextTokenId = 1;
     
     // Events
     event EventCreated(uint256 indexed eventId, address indexed organizer, string title, uint256 totalTickets);
@@ -66,9 +64,11 @@ contract EventTicketing is ERC721, ERC721URIStorage, Ownable, ReentrancyGuard, P
     uint256 public constant MAX_TICKETS_PER_EVENT = 10000;
     uint256 public constant MAX_PLATFORM_FEE = 1000; // 10%
     
-    constructor(address payable _platformWallet) ERC721("EventTicket", "ETKT") {
+    constructor(address payable _platformWallet, address initialOwner) 
+        ERC721("EventTicket", "ETKT") 
+        Ownable(initialOwner)
+    {
         platformWallet = _platformWallet;
-        _tokenIdCounter.increment(); // Start from 1
     }
     
     /**
@@ -135,8 +135,7 @@ contract EventTicketing is ERC721, ERC721URIStorage, Ownable, ReentrancyGuard, P
         uint256 currentPrice = getCurrentPrice(_eventId);
         require(msg.value >= currentPrice, "Insufficient payment");
         
-        uint256 tokenId = _tokenIdCounter.current();
-        _tokenIdCounter.increment();
+        uint256 tokenId = _nextTokenId++;
         
         // Mint NFT
         _safeMint(msg.sender, tokenId);

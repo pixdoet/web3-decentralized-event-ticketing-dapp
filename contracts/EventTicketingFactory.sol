@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.20;
 
 import "./EventTicketing.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -32,7 +32,7 @@ contract EventTicketingFactory is Ownable {
     uint256 public deploymentFee = 0.01 ether;
     address payable public feeRecipient;
     
-    constructor(address payable _feeRecipient) {
+    constructor(address payable _feeRecipient, address initialOwner) Ownable(initialOwner) {
         feeRecipient = _feeRecipient;
     }
     
@@ -49,11 +49,8 @@ contract EventTicketingFactory is Ownable {
         require(_platformWallet != address(0), "Invalid platform wallet");
         
         // Deploy new contract
-        EventTicketing newContract = new EventTicketing(_platformWallet);
+        EventTicketing newContract = new EventTicketing(_platformWallet, msg.sender);
         address contractAddress = address(newContract);
-        
-        // Transfer ownership to deployer
-        newContract.transferOwnership(msg.sender);
         
         // Store contract info
         contracts[contractAddress] = ContractInfo({
